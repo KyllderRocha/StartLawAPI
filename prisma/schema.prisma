@@ -1,0 +1,113 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Endereco {
+  id    Int     @default(autoincrement()) @id
+  rua String  
+  cidade String  
+  estado String  
+  bairro String  
+  cep String  
+  numero String  
+  
+  criadoEm DateTime @default(now())
+  atualizadoEm DateTime?
+  removidoEm DateTime? 
+
+  firma Firma?
+  usuario Usuario?
+}
+
+model Firma {
+  id    Int     @default(autoincrement()) @id
+  nome String  
+  email String  @unique
+  telefone String  @unique
+  endereco   Endereco   @relation(fields: [enderecoID], references: [id])
+  enderecoID Int
+
+  criadoEm DateTime @default(now())
+  atualizadoEm DateTime?
+  removidoEm DateTime? 
+}
+
+model Usuario {
+  id    Int     @default(autoincrement()) @id
+  nome String  
+  email String  @unique
+  login String  @unique
+  senha String  
+  telefone String  @unique
+  cpf String  @unique
+  rg String  @unique
+  cargo String  
+  endereco   Endereco   @relation(fields: [enderecoID], references: [id])
+  enderecoID Int
+
+  criadoPor Int 
+  criadoEm DateTime 
+  atualizadoPor Int? 
+  atualizadoEm DateTime?
+  removidoPor Int? 
+  removidoEm DateTime?
+}
+
+
+model TipoProcesso {
+  id    Int     @default(autoincrement()) @id
+  nome String  
+
+  criadoPor Int 
+  criadoEm DateTime 
+  atualizadoPor Int? 
+  atualizadoEm DateTime?
+  removidoPor Int? 
+  removidoEm DateTime?
+
+  FormularioPadrao FormularioPadrao[]
+  Processo Processo[]
+}
+
+
+model FormularioPadrao {
+  id    Int     @default(autoincrement()) @id
+  nome String  
+  url String  
+  formato String  
+  processo TipoProcesso @relation(fields: [tipoProcessoID], references: [id])
+  tipoProcessoID Int  
+
+  criadoPor Int 
+  criadoEm DateTime 
+  atualizadoPor Int? 
+  atualizadoEm DateTime?
+  removidoPor Int? 
+  removidoEm DateTime?
+}
+
+model Processo {
+  id    Int     @default(autoincrement()) @id
+  nome String 
+  descricao String 
+  observacao String 
+  prazo DateTime 
+  processo TipoProcesso @relation(fields: [tipoProcessoID], references: [id])
+  tipoProcessoID Int  
+
+
+  criadoPor Int 
+  criadoEm DateTime 
+  atualizadoPor Int? 
+  atualizadoEm DateTime?
+  removidoPor Int? 
+  removidoEm DateTime?
+}
