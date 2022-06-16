@@ -1,7 +1,8 @@
 import { Module } from '@nestjs/common';
+import { StatusModule } from './status/status.module';
 
 @Module({
-  imports: [],
+  imports: [StatusModule],
   controllers: [],
   providers: [],
 })

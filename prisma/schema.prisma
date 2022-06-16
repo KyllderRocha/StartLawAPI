@@ -25,6 +25,7 @@ model Endereco {
 
   firma Firma?
   usuario Usuario?
+  cliente Cliente?
 }
 
 model Firma {
@@ -73,8 +74,8 @@ model TipoProcesso {
   removidoPor Int? 
   removidoEm DateTime?
 
-  FormularioPadrao FormularioPadrao[]
-  Processo Processo[]
+  formulariosPadrao FormularioPadrao[]
+  processos Processo[]
 }
 
 
@@ -99,8 +100,10 @@ model Processo {
   nome String 
   descricao String 
   observacao String 
+  status Status @relation(fields: [statusID], references: [id])
+  statusID Int
   prazo DateTime 
-  processo TipoProcesso @relation(fields: [tipoProcessoID], references: [id])
+  tipoProcesso TipoProcesso @relation(fields: [tipoProcessoID], references: [id])
   tipoProcessoID Int  
 
 
@@ -110,4 +113,99 @@ model Processo {
   atualizadoEm DateTime?
   removidoPor Int? 
   removidoEm DateTime?
+
+  formularioPreenchido FormularioPreenchido[]
+  lancamentos LancamentoProcesso[]
+}
+
+
+
+model FormularioPreenchido {
+  id    Int     @default(autoincrement()) @id
+  nome String  
+  url String  
+  formato String  
+  processo Processo @relation(fields: [processoID], references: [id])
+  processoID Int  
+
+  criadoPor Int 
+  criadoEm DateTime 
+  atualizadoPor Int? 
+  atualizadoEm DateTime?
+  removidoPor Int? 
+  removidoEm DateTime?
+}
+
+model Cliente {
+  id    Int     @default(autoincrement()) @id
+  nome String  
+  email String  @unique
+  telefone String  @unique
+  cpf String  @unique
+  rg String  @unique
+  cnpj String  
+  endereco   Endereco   @relation(fields: [enderecoID], references: [id])
+  enderecoID Int
+
+  criadoPor Int 
+  criadoEm DateTime 
+  atualizadoPor Int? 
+  atualizadoEm DateTime?
+  removidoPor Int? 
+  removidoEm DateTime?
+
+  documentos Documento[]
+}
+
+
+model Documento {
+  id    Int     @default(autoincrement()) @id
+  nome String  
+  url String  
+  formato String  
+  cliente Cliente @relation(fields: [clienteID], references: [id])
+  clienteID Int  
+
+  criadoPor Int 
+  criadoEm DateTime 
+  atualizadoPor Int? 
+  atualizadoEm DateTime?
+  removidoPor Int? 
+  removidoEm DateTime?
+}
+
+
+model LancamentoProcesso {
+  id    Int     @default(autoincrement()) @id
+  nome String 
+  descricao String 
+  status Status @relation(fields: [statusID], references: [id])
+  statusID Int
+  prazo DateTime 
+  processo Processo @relation(fields: [processoID], references: [id])
+  processoID Int  
+
+
+  criadoPor Int 
+  criadoEm DateTime 
+  atualizadoPor Int? 
+  atualizadoEm DateTime?
+  removidoPor Int? 
+  removidoEm DateTime?
+}
+
+model Status {
+  id    Int     @default(autoincrement()) @id
+  nome String 
+  
+  
+  criadoPor Int 
+  criadoEm DateTime 
+  atualizadoPor Int? 
+  atualizadoEm DateTime?
+  removidoPor Int? 
+  removidoEm DateTime?
+  
+  lancamentos LancamentoProcesso[]
+  processos Processo[]
 }
