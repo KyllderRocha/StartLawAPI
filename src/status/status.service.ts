@@ -1,17 +1,17 @@
+/* eslint-disable prettier/prettier */
 import { Injectable } from '@nestjs/common';
+import { Prisma } from '@prisma/client';
 import { PrismaService } from 'src/database/PrismaService';
-import { CreateStatusDto } from './dto/create-status.dto';
-import { UpdateStatusDto } from './dto/update-status.dto';
 
 @Injectable()
 export class StatusService {
 
   constructor(private prisma: PrismaService){}
 
-  async create(createStatusDto: CreateStatusDto) {
+  async create(data: Prisma.StatusCreateInput) {
     const statusExists = await this.prisma.status.findFirst({
       where:{
-        nome: createStatusDto.nome
+        nome: data.nome
       }
     });
 
@@ -20,7 +20,7 @@ export class StatusService {
     }
 
     const status = await this.prisma.status.create({
-      data: createStatusDto
+      data,
     });
     return status;
   }
@@ -30,15 +30,49 @@ export class StatusService {
     return status;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} status`;
+  async findOne(id: number) {
+    const status = await this.prisma.status.findFirst({
+      where:{
+        id: id
+      }
+    });
+    return status;
   }
 
-  update(id: number, updateStatusDto: UpdateStatusDto) {
-    return `This action updates a #${id} status`;
+  async update(id: number, data: Prisma.StatusUpdateInput) {
+    const statusExists = await this.prisma.status.findFirst({
+      where:{
+        id,
+      }
+    }); 
+
+    if(!statusExists){
+      return new Error("Status não existe")
+    }
+
+    await this.prisma.status.update({
+      data,
+      where: {
+        id
+      }
+    })
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} status`;
+  async remove(id: number) {
+    const statusExists = await this.prisma.status.findFirst({
+      where:{
+        id,
+      }
+    }); 
+
+    if(!statusExists){
+      return new Error("Status não existe")
+    }
+
+    return await this.prisma.status.delete({
+      where:{
+        id,
+      }
+    })
   }
 }

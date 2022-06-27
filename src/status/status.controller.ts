@@ -1,14 +1,14 @@
+/* eslint-disable prettier/prettier */
 import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
 import { StatusService } from './status.service';
-import { CreateStatusDto } from './dto/create-status.dto';
-import { UpdateStatusDto } from './dto/update-status.dto';
+import { Prisma } from '@prisma/client';
 
 @Controller('status')
 export class StatusController {
   constructor(private readonly statusService: StatusService) {}
 
   @Post()
-  create(@Body() createStatusDto: CreateStatusDto) {
+  create(@Body() createStatusDto: Prisma.StatusCreateInput) {
     return this.statusService.create(createStatusDto);
   }
 
@@ -23,7 +23,7 @@ export class StatusController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateStatusDto: UpdateStatusDto) {
+  update(@Param('id') id: string, @Body() updateStatusDto: Prisma.StatusUpdateInput) {
     return this.statusService.update(+id, updateStatusDto);
   }
 

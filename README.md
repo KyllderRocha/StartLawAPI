@@ -71,3 +71,11 @@ Nest is an MIT-licensed open source project. It can grow thanks to the sponsors 
 ## License
 
 Nest is [MIT licensed](LICENSE).
+
+## Migration 
+
+npx prisma migrate dev --name init 
+
+## Criar resource
+
+npx nest g resource modelo [name]

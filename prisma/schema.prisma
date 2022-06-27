@@ -55,7 +55,7 @@ model Usuario {
   enderecoID Int
 
   criadoPor Int 
-  criadoEm DateTime 
+  criadoEm DateTime @default(now())
   atualizadoPor Int? 
   atualizadoEm DateTime?
   removidoPor Int? 
@@ -68,7 +68,7 @@ model TipoProcesso {
   nome String  
 
   criadoPor Int 
-  criadoEm DateTime 
+  criadoEm DateTime @default(now())
   atualizadoPor Int? 
   atualizadoEm DateTime?
   removidoPor Int? 
@@ -88,7 +88,7 @@ model FormularioPadrao {
   tipoProcessoID Int  
 
   criadoPor Int 
-  criadoEm DateTime 
+  criadoEm DateTime @default(now()) 
   atualizadoPor Int? 
   atualizadoEm DateTime?
   removidoPor Int? 
@@ -108,7 +108,7 @@ model Processo {
 
 
   criadoPor Int 
-  criadoEm DateTime 
+  criadoEm DateTime @default(now()) 
   atualizadoPor Int? 
   atualizadoEm DateTime?
   removidoPor Int? 
@@ -129,7 +129,7 @@ model FormularioPreenchido {
   processoID Int  
 
   criadoPor Int 
-  criadoEm DateTime 
+  criadoEm DateTime @default(now())
   atualizadoPor Int? 
   atualizadoEm DateTime?
   removidoPor Int? 
@@ -148,7 +148,7 @@ model Cliente {
   enderecoID Int
 
   criadoPor Int 
-  criadoEm DateTime 
+  criadoEm DateTime @default(now()) 
   atualizadoPor Int? 
   atualizadoEm DateTime?
   removidoPor Int? 
@@ -167,7 +167,7 @@ model Documento {
   clienteID Int  
 
   criadoPor Int 
-  criadoEm DateTime 
+  criadoEm DateTime @default(now()) 
   atualizadoPor Int? 
   atualizadoEm DateTime?
   removidoPor Int? 
@@ -187,7 +187,7 @@ model LancamentoProcesso {
 
 
   criadoPor Int 
-  criadoEm DateTime 
+  criadoEm DateTime @default(now()) 
   atualizadoPor Int? 
   atualizadoEm DateTime?
   removidoPor Int? 
@@ -200,7 +200,7 @@ model Status {
   
   
   criadoPor Int 
-  criadoEm DateTime 
+  criadoEm DateTime @default(now()) 
   atualizadoPor Int? 
   atualizadoEm DateTime?
   removidoPor Int? 
