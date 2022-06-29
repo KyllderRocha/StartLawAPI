@@ -36,6 +36,8 @@ model Firma {
   endereco   Endereco   @relation(fields: [enderecoID], references: [id])
   enderecoID Int
 
+  usuarios Usuario[]
+
   criadoEm DateTime @default(now())
   atualizadoEm DateTime?
   removidoEm DateTime? 
@@ -53,6 +55,8 @@ model Usuario {
   cargo String  
   endereco   Endereco   @relation(fields: [enderecoID], references: [id])
   enderecoID Int
+  firma   Firma   @relation(fields: [firmaID], references: [id])
+  firmaID Int
 
   criadoPor Int 
   criadoEm DateTime @default(now())
