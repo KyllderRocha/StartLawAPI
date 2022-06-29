@@ -23,9 +23,9 @@ model Endereco {
   atualizadoEm DateTime?
   removidoEm DateTime? 
 
-  firma Firma?
-  usuario Usuario?
-  cliente Cliente?
+  firmas Firma[]
+  usuarios Usuario[]
+  clientes Cliente[]
 }
 
 model Firma {
