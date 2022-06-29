@@ -39,12 +39,21 @@ export class UsuarioService {
     }
   
     async login(login: string, senha: string) {
+      if(login == "" || senha == ""){
+        return new Error("usuario não existe")
+      }
+
       const usuario = await this.prisma.usuario.findFirst({
         where:{
           login: login,
           senha: senha
         }
       });
+
+      if(!usuario){
+        return new Error("usuario não existe")
+      }
+      
       return usuario;
     }
 
