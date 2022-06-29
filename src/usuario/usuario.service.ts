@@ -38,6 +38,16 @@ export class UsuarioService {
       return usuario;
     }
   
+    async login(login: string, senha: string) {
+      const usuario = await this.prisma.usuario.findFirst({
+        where:{
+          login: login,
+          senha: senha
+        }
+      });
+      return usuario;
+    }
+
     async update(id: number, data: Prisma.UsuarioUpdateInput) {
       const usuarioExists = await this.prisma.usuario.findFirst({
         where:{

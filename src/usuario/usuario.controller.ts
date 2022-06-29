@@ -10,10 +10,16 @@ export class UsuarioController {
     return this.usuarioService.create(createUsuarioDto);
   }
 
+  @Post('/login')
+  login(@Body() createUsuarioDto: Prisma.UsuarioCreateInput) {
+    return this.usuarioService.login(createUsuarioDto.login, createUsuarioDto.senha);
+  }
+
   @Get()
   findAll() {
     return this.usuarioService.findAll();
   }
+
 
   @Get(':id')
   findOne(@Param('id') id: string) {
