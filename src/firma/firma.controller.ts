@@ -17,17 +17,17 @@ export class FirmaController {
     }
 
     @Get(':id')
-    findOne(@Param('id') id: string) {
+    findOne(@Param('id') id: number) {
       return this.firmaService.findOne(+id);
     }
 
     @Patch(':id')
-    update(@Param('id') id: string, @Body() updateFirmaDto: Prisma.FirmaUpdateInput) {
+    update(@Param('id') id: number, @Body() updateFirmaDto: Prisma.FirmaUpdateInput) {
       return this.firmaService.update(+id, updateFirmaDto);
     }
 
     @Delete(':id')
-    remove(@Param('id') id: string) {
+    remove(@Param('id') id: number) {
       return this.firmaService.remove(+id);
     }
 }

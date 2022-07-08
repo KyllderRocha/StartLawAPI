@@ -17,17 +17,17 @@ export class FormularioPadraoController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
+  findOne(@Param('id') id: number) {
     return this.formularioPadraoService.findOne(+id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateFormularioPadraoDto: Prisma.FormularioPadraoUpdateInput) {
+  update(@Param('id') id: number, @Body() updateFormularioPadraoDto: Prisma.FormularioPadraoUpdateInput) {
     return this.formularioPadraoService.update(+id, updateFormularioPadraoDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
+  remove(@Param('id') id: number) {
     return this.formularioPadraoService.remove(+id);
   }
 }

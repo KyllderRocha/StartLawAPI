@@ -10,31 +10,17 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Endereco {
+model Firma {
   id    Int     @default(autoincrement()) @id
+  nome String  
+  email String  @unique
+  telefone String  @unique
   rua String  
   cidade String  
   estado String  
   bairro String  
   cep String  
   numero String  
-  
-  criadoEm DateTime @default(now())
-  atualizadoEm DateTime?
-  removidoEm DateTime? 
-
-  firmas Firma[]
-  usuarios Usuario[]
-  clientes Cliente[]
-}
-
-model Firma {
-  id    Int     @default(autoincrement()) @id
-  nome String  
-  email String  @unique
-  telefone String  @unique
-  endereco   Endereco   @relation(fields: [enderecoID], references: [id])
-  enderecoID Int
 
   usuarios Usuario[]
 
@@ -53,8 +39,12 @@ model Usuario {
   cpf String  @unique
   rg String  @unique
   cargo String  
-  endereco   Endereco   @relation(fields: [enderecoID], references: [id])
-  enderecoID Int
+  rua String  
+  cidade String  
+  estado String  
+  bairro String  
+  cep String  
+  numero String  
   firma   Firma   @relation(fields: [firmaID], references: [id])
   firmaID Int
 
@@ -64,13 +54,24 @@ model Usuario {
   atualizadoEm DateTime?
   removidoPor Int? 
   removidoEm DateTime?
+  
+  tiposProcessos TipoProcesso[]
+  formulariosPadrao FormularioPadrao[]
+  processos Processo[]
+  formulariosPreenchidos FormularioPreenchido[]
+  clientes Cliente[]
+  documentos Documento[]
+  lacamentos LancamentoProcesso[]
+  status Status[]
 }
 
 
 model TipoProcesso {
   id    Int     @default(autoincrement()) @id
   nome String  
+  descricao String  
 
+  userCriador   Usuario   @relation(fields: [criadoPor], references: [id])
   criadoPor Int 
   criadoEm DateTime @default(now())
   atualizadoPor Int? 
@@ -91,6 +92,7 @@ model FormularioPadrao {
   processo TipoProcesso @relation(fields: [tipoProcessoID], references: [id])
   tipoProcessoID Int  
 
+  userCriador   Usuario   @relation(fields: [criadoPor], references: [id])
   criadoPor Int 
   criadoEm DateTime @default(now()) 
   atualizadoPor Int? 
@@ -109,8 +111,11 @@ model Processo {
   prazo DateTime 
   tipoProcesso TipoProcesso @relation(fields: [tipoProcessoID], references: [id])
   tipoProcessoID Int  
+  cliente Cliente @relation(fields: [clienteID], references: [id])
+  clienteID Int  
 
 
+  userCriador   Usuario   @relation(fields: [criadoPor], references: [id])
   criadoPor Int 
   criadoEm DateTime @default(now()) 
   atualizadoPor Int? 
@@ -132,6 +137,7 @@ model FormularioPreenchido {
   processo Processo @relation(fields: [processoID], references: [id])
   processoID Int  
 
+  userCriador   Usuario   @relation(fields: [criadoPor], references: [id])
   criadoPor Int 
   criadoEm DateTime @default(now())
   atualizadoPor Int? 
@@ -148,9 +154,14 @@ model Cliente {
   cpf String  @unique
   rg String  @unique
   cnpj String  
-  endereco   Endereco   @relation(fields: [enderecoID], references: [id])
-  enderecoID Int
+  rua String  
+  cidade String  
+  estado String  
+  bairro String  
+  cep String  
+  numero String  
 
+  userCriador   Usuario   @relation(fields: [criadoPor], references: [id])
   criadoPor Int 
   criadoEm DateTime @default(now()) 
   atualizadoPor Int? 
@@ -159,6 +170,7 @@ model Cliente {
   removidoEm DateTime?
 
   documentos Documento[]
+  processos Processo[]
 }
 
 
@@ -170,6 +182,7 @@ model Documento {
   cliente Cliente @relation(fields: [clienteID], references: [id])
   clienteID Int  
 
+  userCriador   Usuario   @relation(fields: [criadoPor], references: [id])
   criadoPor Int 
   criadoEm DateTime @default(now()) 
   atualizadoPor Int? 
@@ -189,7 +202,7 @@ model LancamentoProcesso {
   processo Processo @relation(fields: [processoID], references: [id])
   processoID Int  
 
-
+  userCriador   Usuario   @relation(fields: [criadoPor], references: [id])
   criadoPor Int 
   criadoEm DateTime @default(now()) 
   atualizadoPor Int? 
@@ -202,7 +215,7 @@ model Status {
   id    Int     @default(autoincrement()) @id
   nome String 
   
-  
+  userCriador   Usuario   @relation(fields: [criadoPor], references: [id])
   criadoPor Int 
   criadoEm DateTime @default(now()) 
   atualizadoPor Int? 

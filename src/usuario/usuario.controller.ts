@@ -1,17 +1,26 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
-import { Prisma } from '@prisma/client';
+import { Controller, Get, Post, Body, Patch, Param, Delete, ConflictException, NotFoundException } from '@nestjs/common';
+import { CreateUsuarioDto } from './dto/create-usuario.dto';
+import { UpdateUsuarioDto } from './dto/update-usuario.dto';
 import { UsuarioService } from './usuario.service';
 
 @Controller('usuario')
 export class UsuarioController {
   constructor(private readonly usuarioService: UsuarioService) {}
   @Post()
-  create(@Body() createUsuarioDto: Prisma.UsuarioCreateInput) {
-    return this.usuarioService.create(createUsuarioDto);
+  create(@Body() createUsuarioDto: CreateUsuarioDto) {
+    const user = {
+      ...createUsuarioDto,
+      firmaID: +createUsuarioDto.firmaID,
+      criadoPor: +createUsuarioDto.criadoPor
+    }
+    return this.usuarioService.create(user)
+    .catch(e => {
+      throw new ConflictException(e.message);
+    });
   }
 
   @Post('/login')
-  login(@Body() createUsuarioDto: Prisma.UsuarioCreateInput) {
+  login(@Body() createUsuarioDto: CreateUsuarioDto) {
     return this.usuarioService.login(createUsuarioDto.login, createUsuarioDto.senha);
   }
 
@@ -20,19 +29,35 @@ export class UsuarioController {
     return this.usuarioService.findAll();
   }
 
+  @Post('/firma/:firmaID')
+  findAllFirma(@Param('firmaID') firmaID: number, @Body() createUsuarioDto: CreateUsuarioDto) {
+    return this.usuarioService.findAllFirma(+firmaID, createUsuarioDto);
+  }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
+  findOne(@Param('id') id: number) {
     return this.usuarioService.findOne(+id);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateUsuarioDto: Prisma.UsuarioUpdateInput) {
-    return this.usuarioService.update(+id, updateUsuarioDto);
+  @Post('/atualizar/:id')
+  atualizar(@Param('id') id: number, @Body() updateUsuarioDto: UpdateUsuarioDto) {
+    const user = {
+      ...updateUsuarioDto,
+      atualizadoPor: +updateUsuarioDto.criadoPor
+    }
+    return this.usuarioService.update(+id, user)
+    .catch(e => {
+      throw new NotFoundException(e.message);
+    });
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.usuarioService.remove(+id);
+  @Post('/deletar/:id/:removidoPor')
+  remove(@Param('id') id: number, @Param('removidoPor') removidoPor: number) {
+    return this.usuarioService.remove(+id, +removidoPor);
+  }
+  
+  @Post('/deletarRevert/:id')
+  deletarRevert(@Param('id') id: number) {
+    return this.usuarioService.deletarRevert(+id);
   }
 }

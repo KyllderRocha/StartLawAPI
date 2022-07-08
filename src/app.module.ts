@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { StatusModule } from './status/status.module';
-import { EnderecoModule } from './endereco/endereco.module';
+// import { EnderecoModule } from './endereco/endereco.module';
 import { FirmaModule } from './firma/firma.module';
 import { UsuarioModule } from './usuario/usuario.module';
 import { TipoProcessoModule } from './tipo-processo/tipo-processo.module';
@@ -12,7 +12,7 @@ import { DocumentoModule } from './documento/documento.module';
 import { LancamentoProcessoModule } from './lancamento-processo/lancamento-processo.module';
 
 @Module({
-  imports: [StatusModule, EnderecoModule, FirmaModule, UsuarioModule, TipoProcessoModule, FormularioPadraoModule, ProcessoModule, FormularioPreenchidoModule, ClienteModule, DocumentoModule, LancamentoProcessoModule],
+  imports: [StatusModule, FirmaModule, UsuarioModule, TipoProcessoModule, FormularioPadraoModule, ProcessoModule, FormularioPreenchidoModule, ClienteModule, DocumentoModule, LancamentoProcessoModule],
   controllers: [],
   providers: [],
 })

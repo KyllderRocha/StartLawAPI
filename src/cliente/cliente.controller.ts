@@ -1,15 +1,23 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, ConflictException, NotFoundException } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { ClienteService } from './cliente.service';
+import { CreateClienteDto } from './dto/create-cliente.dto';
+import { UpdateClienteDto } from './dto/update-cliente.dto';
 
 @Controller('cliente')
 export class ClienteController {
   constructor(private readonly clienteService: ClienteService) {}
 
-  
   @Post()
-  create(@Body() createClienteDto: Prisma.ClienteCreateInput) {
-    return this.clienteService.create(createClienteDto);
+  create(@Body() createClienteDto: CreateClienteDto) {
+    const user = {
+      ...createClienteDto,
+      criadoPor: +createClienteDto.criadoPor
+    }
+    return this.clienteService.create(user)
+    .catch(e => {
+      throw new ConflictException(e.message);
+    });
   }
 
   @Get()
@@ -17,18 +25,35 @@ export class ClienteController {
     return this.clienteService.findAll();
   }
 
+  @Post('/firma/:firmaID')
+  findAllFirma(@Param('firmaID') firmaID: number, @Body() createClienteDto: CreateClienteDto) {
+    return this.clienteService.findAllFirma(+firmaID, createClienteDto);
+  }
+
   @Get(':id')
-  findOne(@Param('id') id: string) {
+  findOne(@Param('id') id: number) {
     return this.clienteService.findOne(+id);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateClienteDto: Prisma.ClienteUpdateInput) {
-    return this.clienteService.update(+id, updateClienteDto);
+  @Post('/atualizar/:id')
+  atualizar(@Param('id') id: number, @Body() updateClienteDto: UpdateClienteDto) {
+    const user = {
+      ...updateClienteDto,
+      atualizadoPor: +updateClienteDto.criadoPor
+    }
+    return this.clienteService.update(+id, user)
+    .catch(e => {
+      throw new NotFoundException(e.message);
+    });
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.clienteService.remove(+id);
+  @Post('/deletar/:id/:removidoPor')
+  remove(@Param('id') id: number, @Param('removidoPor') removidoPor: number) {
+    return this.clienteService.remove(+id, +removidoPor);
+  }
+  
+  @Post('/deletarRevert/:id')
+  deletarRevert(@Param('id') id: number) {
+    return this.clienteService.deletarRevert(+id);
   }
 }

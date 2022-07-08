@@ -15,7 +15,7 @@ export class FirmaService {
       });
   
       if(statusExists){
-        return new Error("Status já existe")
+        return new Error("Firma já existe")
       }
   
       const status = await this.prisma.firma.create({
@@ -46,7 +46,7 @@ export class FirmaService {
       }); 
   
       if(!statusExists){
-        return new Error("Status não existe")
+        return new Error("Firma não existe")
       }
   
       await this.prisma.firma.update({

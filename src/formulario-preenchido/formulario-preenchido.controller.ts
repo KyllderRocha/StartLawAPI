@@ -18,17 +18,17 @@ export class FormularioPreenchidoController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
+  findOne(@Param('id') id: number) {
     return this.formularioPreenchidoService.findOne(+id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateFormularioPreenchidoDto: Prisma.FormularioPreenchidoUpdateInput) {
+  update(@Param('id') id: number, @Body() updateFormularioPreenchidoDto: Prisma.FormularioPreenchidoUpdateInput) {
     return this.formularioPreenchidoService.update(+id, updateFormularioPreenchidoDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
+  remove(@Param('id') id: number) {
     return this.formularioPreenchidoService.remove(+id);
   }
 }
